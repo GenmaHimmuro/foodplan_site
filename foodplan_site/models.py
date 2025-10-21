@@ -58,6 +58,11 @@ class Recipe(models.Model):
         max_length=150,
         help_text='Название рецепта, например: Овсянка с ягодами'
     )
+    image = models.ImageField(
+        verbose_name='Фото блюда',
+        upload_to='dishes/',
+        blank=True
+    )
     diet_type = models.CharField(
         verbose_name='Тип меню',
         max_length=50,
