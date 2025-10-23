@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'foodplan_site',
     'accounts.apps.AccountsConfig',
+    'subscription'
 ]
 
 MIDDLEWARE = [

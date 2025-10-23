@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from foodplan_site.models import RecipeIngredient, Recipe, Ingredient
+from foodplan_site.models import RecipeIngredient, Recipe, Ingredient, Allergen
+from subscription.models import Subscription, Promotion
 
 
 class RecipeIngredientInline(admin.TabularInline):
@@ -16,4 +17,14 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Promotion)
+class PromotionAdmin(admin.ModelAdmin):
     pass

@@ -1,16 +1,20 @@
 from django.db import models
 
+from foodplan_site.choices import ALLERGENS, MENU_TYPES, DISH_TYPES
+
+
+class Allergen(models.Model):
+    code = models.CharField(max_length=50, choices=ALLERGENS, unique=True)
+
+    def __str__(self):
+        return self.get_code_display()  # Использует название из choices
+
+    class Meta:
+        verbose_name = 'Аллерген'
+        verbose_name_plural = 'Аллергены'
+
 
 class Ingredient(models.Model):
-    ALLERGENS = [
-        ('seafood', 'Рыба и морепродукты'),
-        ('meat', 'Мясо'),
-        ('grains', 'Зерновые'),
-        ('bee_products', 'Продукты пчеловодства'),
-        ('nuts', 'Орехи и бобовые'),
-        ('milk', 'Молочные продукты'),
-    ]
-
     name = models.CharField(
         verbose_name='Название продукта',
         max_length=100,
@@ -22,13 +26,13 @@ class Ingredient(models.Model):
         blank=True,
         help_text='Краткое описание продукта или способа приготовления'
     )
-    allergen = models.CharField(
-        verbose_name='Аллерген',
-        max_length=50,
-        choices=ALLERGENS,
-        blank=True,
+    allergen = models.ForeignKey(
+        Allergen,
+        on_delete=models.SET_NULL,
         null=True,
-        default=None
+        blank=True,
+        related_name='ingredients',
+        verbose_name='Аллерген'
     )
 
     def __str__(self):
@@ -40,19 +44,6 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    MENU_TYPES = [
-        ('classic', 'Классическое'),
-        ('low_carb', 'Низкоуглеводное'),
-        ('vegetarian', 'Вегетарианское'),
-        ('keto', 'Кето'),
-    ]
-    DISH_TYPES = [
-        ('breakfast', 'Завтрак'),
-        ('lunch', 'Обед'),
-        ('dinner', 'Ужин'),
-        ('dessert', 'Десерт'),
-    ]
-
     name = models.CharField(
         verbose_name='Название блюда',
         max_length=150,
@@ -96,12 +87,14 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='in_recipes'
+        related_name='in_recipes',
+        verbose_name='Ингредиент'
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='ingredients'
+        related_name='ingredients',
+        verbose_name='Рецепт'
     )
     quantity = models.DecimalField(
         verbose_name='Количество продукта',
@@ -119,3 +112,7 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент рецепта'
         verbose_name_plural = 'Ингредиенты рецепта'
+        unique_together = ('recipe', 'ingredient')
+
+    def __str__(self):
+        return f'{self.recipe.name}: {self.ingredient.name}'
