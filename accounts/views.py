@@ -3,6 +3,8 @@ from .forms import CustomUserCreationForm
 from django.contrib.auth import login
 from django.contrib import messages
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 
 
 def register(request):
@@ -12,7 +14,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Регистрация прошла успешно!')
-            return redirect('accounts:home')
+            return redirect('accounts:order')
         else:
             messages.error(request, 'Ошибка при регистрации. Проверьте данные.')
     else:
@@ -24,8 +26,27 @@ def home(request):
     return render(request, 'index.html')
 
 
+@login_required
 def lk(request):
-    return render(request, 'lk.html')
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
+
+        user = request.user
+        if name:
+            user.name = name
+        if password and password == password_confirm:
+            user.password = make_password(password)
+        elif password and password != password_confirm:
+            messages.error(request, 'Пароли не совпадают.')
+            return render(request, 'lk.html', {'user': user})
+
+        user.save()
+        messages.success(request, 'Данные успешно обновлены!')
+        return redirect('accounts:lk')
+
+    return render(request, 'lk.html', {'user': request.user})
 
 
 def order(request):

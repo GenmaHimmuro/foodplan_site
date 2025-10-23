@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser
 import re
 
@@ -37,3 +37,18 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
     
+
+class CustomAuthenticationForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': (
+            "Неверный email или пароль. "
+        ),
+    }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'Email'
+        self.fields['password'].label = 'Пароль'
+
+    class Meta:
+        fields = ['username', 'password']
