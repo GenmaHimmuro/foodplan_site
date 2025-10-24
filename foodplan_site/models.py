@@ -7,7 +7,7 @@ class Allergen(models.Model):
     code = models.CharField(max_length=50, choices=ALLERGENS, unique=True)
 
     def __str__(self):
-        return self.get_code_display()  # Использует название из choices
+        return self.get_code_display()
 
     class Meta:
         verbose_name = 'Аллерген'

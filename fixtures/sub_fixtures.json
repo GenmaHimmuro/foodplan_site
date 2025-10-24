@@ -1,0 +1,110 @@
+[
+  {
+    "model": "accounts.customuser",
+    "pk": 1,
+    "fields": {
+      "username": "user1",
+      "password": "pbkdf2_sha256$260000$dummy$dummyhash",
+      "email": "user1@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "name": "Тестовый пользователь 1"
+    }
+  },
+  {
+    "model": "accounts.customuser",
+    "pk": 2,
+    "fields": {
+      "username": "user2",
+      "password": "pbkdf2_sha256$260000$dummy$dummyhash2",
+      "email": "user2@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "is_superuser": false,
+      "name": "Тестовый пользователь 2"
+    }
+  },
+  {"model": "subscription.pricerule", "pk": 1, "fields": {"dish_type": "breakfast", "duration": 1, "price": "100"}},
+  {"model": "subscription.pricerule", "pk": 2, "fields": {"dish_type": "lunch", "duration": 1, "price": "300"}},
+  {"model": "subscription.pricerule", "pk": 3, "fields": {"dish_type": "dinner", "duration": 1, "price": "200"}},
+  {"model": "subscription.pricerule", "pk": 4, "fields": {"dish_type": "dessert", "duration": 1, "price": "100"}},
+
+  {"model": "subscription.pricerule", "pk": 5, "fields": {"dish_type": "breakfast", "duration": 3, "price": "200"}},
+  {"model": "subscription.pricerule", "pk": 6, "fields": {"dish_type": "lunch", "duration": 3, "price": "600"}},
+  {"model": "subscription.pricerule", "pk": 7, "fields": {"dish_type": "dinner", "duration": 3, "price": "400"}},
+  {"model": "subscription.pricerule", "pk": 8, "fields": {"dish_type": "dessert", "duration": 3, "price": "200"}},
+
+  {"model": "subscription.pricerule", "pk": 9, "fields": {"dish_type": "breakfast", "duration": 6, "price": "300"}},
+  {"model": "subscription.pricerule", "pk": 10, "fields": {"dish_type": "lunch", "duration": 6, "price": "900"}},
+  {"model": "subscription.pricerule", "pk": 11, "fields": {"dish_type": "dinner", "duration": 6, "price": "600"}},
+  {"model": "subscription.pricerule", "pk": 12, "fields": {"dish_type": "dessert", "duration": 6, "price": "300"}},
+
+  {"model": "subscription.pricerule", "pk": 13, "fields": {"dish_type": "breakfast", "duration": 12, "price": "400"}},
+  {"model": "subscription.pricerule", "pk": 14, "fields": {"dish_type": "lunch", "duration": 12, "price": "1200"}},
+  {"model": "subscription.pricerule", "pk": 15, "fields": {"dish_type": "dinner", "duration": 12, "price": "800"}},
+  {"model": "subscription.pricerule", "pk": 16, "fields": {"dish_type": "dessert", "duration": 12, "price": "400"}},
+
+  {"model": "subscription.promotion", "pk": 1, "fields": {"name": "New Year Sale", "discount_code": "NY2025", "discount_percent": "10", "is_active": true}},
+  {"model": "subscription.promotion", "pk": 2, "fields": {"name": "Spring Promo", "discount_code": "SPRING25", "discount_percent": "25", "is_active": true}},
+  {"model": "subscription.promotion", "pk": 3, "fields": {"name": "Summer Offer", "discount_code": "SUMMER15", "discount_percent": "15", "is_active": false}},
+  {"model": "subscription.promotion", "pk": 4, "fields": {"name": "Black Friday", "discount_code": "BF2025", "discount_percent": "50", "is_active": false}},
+  {"model": "subscription.promotion", "pk": 5, "fields": {"name": "Autumn Special", "discount_code": "AUT2025", "discount_percent": "20", "is_active": true}},
+
+  {"model": "subscription.subscription", "pk": 1, "fields": {
+      "user": 1,
+      "duration": 1,
+      "start_date": "2025-10-01",
+      "expiring_date": "2025-11-01",
+      "diet_type": "classic",
+      "is_breakfast": true,
+      "is_lunch": true,
+      "is_dinner": true,
+      "is_dessert": true,
+      "excluded_allergens": [1,5],
+      "price": "700",
+      "promotion": 1
+  }},
+  {"model": "subscription.subscription", "pk": 2, "fields": {
+      "user": 2,
+      "duration": 3,
+      "start_date": "2025-08-01",
+      "expiring_date": "2025-11-01",
+      "diet_type": "low_carb",
+      "is_breakfast": true,
+      "is_lunch": true,
+      "is_dinner": true,
+      "is_dessert": false,
+      "excluded_allergens": [2],
+      "price": "1000",
+      "promotion": 2
+  }},
+  {"model": "subscription.subscription", "pk": 3, "fields": {
+      "user": 1,
+      "duration": 6,
+      "start_date": "2025-01-01",
+      "expiring_date": "2025-07-01",
+      "diet_type": "vegetarian",
+      "is_breakfast": false,
+      "is_lunch": true,
+      "is_dinner": true,
+      "is_dessert": true,
+      "excluded_allergens": [],
+      "price": "1500",
+      "promotion": null
+  }},
+  {"model": "subscription.subscription", "pk": 4, "fields": {
+      "user": 2,
+      "duration": 12,
+      "start_date": "2024-10-01",
+      "expiring_date": "2025-10-01",
+      "diet_type": "keto",
+      "is_breakfast": true,
+      "is_lunch": true,
+      "is_dinner": true,
+      "is_dessert": true,
+      "excluded_allergens": [3,6],
+      "price": "2800",
+      "promotion": 5
+  }}
+]
