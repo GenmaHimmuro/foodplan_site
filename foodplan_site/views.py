@@ -11,17 +11,17 @@ def recipe_detail(request, pk: int):
 
 
 def recipe_list(request):
-    diet_type = request.GET.get('diet_type')  # classic/low_carb/vegetarian/keto
-    dish_type = request.GET.get('dish_type')  # breakfast/lunch/dinner/dessert
+    diet_type = request.GET.get('diet_type')
+    dish_type = request.GET.get('dish_type')
 
-    qs = Recipe.objects.all().order_by('name')
+    recipes = Recipe.objects.all().order_by('name')
     if diet_type:
-        qs = qs.filter(diet_type=diet_type)
+        recipes = recipes.filter(diet_type=diet_type)
     if dish_type:
-        qs = qs.filter(dish_type=dish_type)
+        recipes = recipes.filter(dish_type=dish_type)
 
     return render(request, 'recipes_list.html', {
-        'recipes': qs,
+        'recipes': recipes,
         'diet_type': diet_type,
         'dish_type': dish_type,
     })

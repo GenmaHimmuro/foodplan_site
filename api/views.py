@@ -12,18 +12,18 @@ class CreateOrderView(APIView):
     def post(self, request):
         serializer = OrderSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
-        sub = serializer.save()
+        subscription = serializer.save()
         return Response(
             {
-                'id': sub.id,
-                'price': str(sub.price) if sub.price is not None else None,
-                'duration': sub.duration,
-                'diet_type': sub.diet_type,
-                'is_breakfast': sub.is_breakfast,
-                'is_lunch': sub.is_lunch,
-                'is_dinner': sub.is_dinner,
-                'is_dessert': sub.is_dessert,
-                'promotion': sub.promotion_id,
+                'id': subscription.id,
+                'price': str(subscription.price) if subscription.price is not None else None,
+                'duration': subscription.duration,
+                'diet_type': subscription.diet_type,
+                'is_breakfast': subscription.is_breakfast,
+                'is_lunch': subscription.is_lunch,
+                'is_dinner': subscription.is_dinner,
+                'is_dessert': subscription.is_dessert,
+                'promotion': subscription.promotion_id,
             },
             status=status.HTTP_201_CREATED,
         )
@@ -37,4 +37,3 @@ class PromoValidateView(APIView):
         serializer.is_valid(raise_exception=True)
         price, applied = serializer.compute_price()
         return Response({'price': str(price), 'promo_applied': applied})
-

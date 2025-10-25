@@ -59,14 +59,14 @@ def order(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            promo = None
-            code = form.cleaned_data.get('promo_code')
-            if code:
-                promo = Promotion.objects.filter(discount_code=code.strip(), is_active=True).first()
-                if not promo:
+            promotion = None
+            promo_code = form.cleaned_data.get('promo_code')
+            if promo_code:
+                promotion = Promotion.objects.filter(discount_code=promo_code.strip(), is_active=True).first()
+                if not promotion:
                     messages.error(request, 'Промокод не найден или не активен. Скидка не применена.')
 
-            sub = Subscription(
+            subscription = Subscription(
                 user=request.user,
                 duration=form.cleaned_data['duration'],
                 diet_type=form.cleaned_data['diet_type'],
@@ -74,16 +74,15 @@ def order(request):
                 is_lunch=form.cleaned_data['is_lunch'],
                 is_dinner=form.cleaned_data['is_dinner'],
                 is_dessert=form.cleaned_data['is_dessert'],
-                promotion=promo,
+                promotion=promotion,
             )
-            sub.save()
-            # Set allergens m2m if any
-            allergens = form.cleaned_data.get('excluded_allergens')
-            if allergens:
-                sub.excluded_allergens.set(allergens)
+            subscription.save()
+            allergens_qs = form.cleaned_data.get('excluded_allergens')
+            if allergens_qs:
+                subscription.excluded_allergens.set(allergens_qs)
 
-            messages.success(request, f'Подписка создана. Стоимость: {sub.price}₽')
-            context.update({'price': sub.price, 'applied_promo': bool(promo)})
+            messages.success(request, f'Подписка создана. Стоимость: {subscription.price}₽')
+            context.update({'price': subscription.price, 'applied_promo': bool(promotion)})
         else:
             context['form_errors'] = form.errors
         context['form'] = form

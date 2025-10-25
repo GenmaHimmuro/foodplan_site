@@ -8,8 +8,8 @@ from foodplan_site.choices import MENU_TYPES, DURATION_CHOICES
 from subscription.models import Subscription, Promotion
 
 
-def _choices_values(choices):
-    return {c[0] for c in choices}
+def get_choice_values(choices):
+    return {choice_value for choice_value, _ in choices}
 
 
 class OrderSerializer(serializers.Serializer):
@@ -27,42 +27,42 @@ class OrderSerializer(serializers.Serializer):
     promo_code = serializers.CharField(required=False, allow_blank=True)
 
     def validate_duration(self, value: int) -> int:
-        allowed = _choices_values(DURATION_CHOICES)
+        allowed = get_choice_values(DURATION_CHOICES)
         if value not in allowed:
             raise serializers.ValidationError(_('Недопустимый срок подписки'))
         return value
 
-    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+    def validate(self, attributes: dict[str, Any]) -> dict[str, Any]:
         if not (
-            attrs.get('is_breakfast')
-            or attrs.get('is_lunch')
-            or attrs.get('is_dinner')
-            or attrs.get('is_dessert')
+            attributes.get('is_breakfast')
+            or attributes.get('is_lunch')
+            or attributes.get('is_dinner')
+            or attributes.get('is_dessert')
         ):
             raise serializers.ValidationError(_('Выберите хотя бы один приём пищи'))
-        return attrs
+        return attributes
 
-    def _get_promotion(self, code: str | None) -> Promotion | None:
+    def get_promotion(self, code: str | None) -> Promotion | None:
         if not code:
             return None
         return Promotion.objects.filter(discount_code=code.strip(), is_active=True).first()
 
     def create(self, validated_data):
         request = self.context['request']
-        promo = self._get_promotion(validated_data.get('promo_code'))
-        allergens_ids = validated_data.pop('excluded_allergens', [])
+        promotion = self.get_promotion(validated_data.get('promo_code'))
+        allergen_ids = validated_data.pop('excluded_allergens', [])
         validated_data.pop('promo_code', None)
 
-        sub = Subscription(
+        subscription = Subscription(
             user=request.user,
-            promotion=promo,
+            promotion=promotion,
             **validated_data,
         )
-        sub.save()
-        if allergens_ids:
-            allergens = Allergen.objects.filter(id__in=allergens_ids)
-            sub.excluded_allergens.set(allergens)
-        return sub
+        subscription.save()
+        if allergen_ids:
+            allergens = Allergen.objects.filter(id__in=allergen_ids)
+            subscription.excluded_allergens.set(allergens)
+        return subscription
 
 
 class PromoCheckSerializer(OrderSerializer):
@@ -70,8 +70,8 @@ class PromoCheckSerializer(OrderSerializer):
         raise NotImplementedError
 
     def compute_price(self):
-        promo = self._get_promotion(self.validated_data.get('promo_code'))
-        sub = Subscription(
+        promotion = self.get_promotion(self.validated_data.get('promo_code'))
+        subscription = Subscription(
             user=self.context['request'].user,
             duration=self.validated_data['duration'],
             diet_type=self.validated_data['diet_type'],
@@ -79,8 +79,7 @@ class PromoCheckSerializer(OrderSerializer):
             is_lunch=self.validated_data.get('is_lunch', False),
             is_dinner=self.validated_data.get('is_dinner', False),
             is_dessert=self.validated_data.get('is_dessert', False),
-            promotion=promo,
+            promotion=promotion,
         )
-        price = sub.calculate_price()
-        return price, bool(promo)
-
+        price = subscription.calculate_price()
+        return price, bool(promotion)
