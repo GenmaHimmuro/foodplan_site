@@ -1,0 +1,77 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Рецепты — Foodplan</title>
+    <style>.card img{object-fit: cover; height: 160px}</style>
+    </head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top navbar__opacity">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'img/logo.8d8f24edbb5f.svg' %}" height="55" width="189" alt="">
+            </a>
+        </div>
+    </nav>
+ </header>
+<main style="margin-top: calc(2rem + 85px);">
+    <section>
+        <div class="container">
+            <h2 class="mb-3">Рецепты</h2>
+            <form class="row g-2 mb-3">
+                <div class="col-sm-4">
+                    <select name="diet_type" class="form-select">
+                        <option value="">Тип меню</option>
+                        <option value="classic" {% if diet_type=='classic' %}selected{% endif %}>Классическое</option>
+                        <option value="low_carb" {% if diet_type=='low_carb' %}selected{% endif %}>Низкоуглеводное</option>
+                        <option value="vegetarian" {% if diet_type=='vegetarian' %}selected{% endif %}>Вегетарианское</option>
+                        <option value="keto" {% if diet_type=='keto' %}selected{% endif %}>Кето</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <select name="dish_type" class="form-select">
+                        <option value="">Тип блюда</option>
+                        <option value="breakfast" {% if dish_type=='breakfast' %}selected{% endif %}>Завтрак</option>
+                        <option value="lunch" {% if dish_type=='lunch' %}selected{% endif %}>Обед</option>
+                        <option value="dinner" {% if dish_type=='dinner' %}selected{% endif %}>Ужин</option>
+                        <option value="dessert" {% if dish_type=='dessert' %}selected{% endif %}>Десерт</option>
+                    </select>
+                </div>
+                <div class="col-sm-4 d-grid">
+                    <button class="btn btn-outline-success foodplan_green foodplan__border_green">Фильтровать</button>
+                </div>
+            </form>
+            <div class="row">
+                {% for recipe in recipes %}
+                <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                    <div class="card h-100 foodplan__card_borderless">
+                        {% if recipe.image %}
+                            <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name}}">
+                        {% else %}
+                            <img src="{% static 'img/circle1.png' %}" class="card-img-top" alt="{{ recipe.name}}">
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ recipe.name }}</h5>
+                            <div class="mt-auto">
+                                <a class="btn btn-outline-success foodplan_green foodplan__border_green" href="{% url 'recipe_detail' recipe.pk %}">Открыть</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-secondary">Ничего не найдено</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
+
