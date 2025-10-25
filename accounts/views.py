@@ -7,8 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from subscription.forms import OrderForm
 from subscription.models import Subscription, Promotion
-from foodplan_site.models import Allergen
+from foodplan_site.models import Allergen, DietInfo
 from django.db.utils import OperationalError, ProgrammingError
+from datetime import date
 
 
 def register(request):
@@ -50,7 +51,21 @@ def lk(request):
         messages.success(request, 'Данные успешно обновлены!')
         return redirect('accounts:lk')
 
-    return render(request, 'lk.html', {'user': request.user})
+    context = {'user': request.user}
+    try:
+        active_subscriptions = (
+            request.user.subscriptions.filter(expiring_date__gte=date.today())
+            .order_by('-start_date')
+        )
+        diet_map = {d.code: d for d in DietInfo.objects.all()}
+        for s in active_subscriptions:
+            s.meals_count = int(s.is_breakfast) + int(s.is_lunch) + int(s.is_dinner) + int(s.is_dessert)
+            diet = diet_map.get(s.diet_type)
+            s.diet_description = getattr(diet, 'description', '') if diet else ''
+        context['active_subscriptions'] = active_subscriptions
+    except (OperationalError, ProgrammingError):
+        context['active_subscriptions'] = []
+    return render(request, 'lk.html', context)
 
 
 @login_required
@@ -74,6 +89,7 @@ def order(request):
                 is_lunch=form.cleaned_data['is_lunch'],
                 is_dinner=form.cleaned_data['is_dinner'],
                 is_dessert=form.cleaned_data['is_dessert'],
+                persons=form.cleaned_data.get('persons', 1),
                 promotion=promotion,
             )
             subscription.save()
@@ -89,7 +105,6 @@ def order(request):
     else:
         context['form'] = OrderForm()
 
-    # For rendering allergy list; tolerate missing tables during setup
     try:
         context['allergens'] = Allergen.objects.all()
     except (OperationalError, ProgrammingError):

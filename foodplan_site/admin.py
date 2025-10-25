@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from foodplan_site.models import RecipeIngredient, Recipe, Ingredient, Allergen
+from foodplan_site.models import RecipeIngredient, Recipe, Ingredient, Allergen, DietInfo
 from subscription.models import Subscription, Promotion
 
 
@@ -28,3 +28,8 @@ class SubscriptionAdmin(admin.ModelAdmin):
 @admin.register(Promotion)
 class PromotionAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(DietInfo)
+class DietInfoAdmin(admin.ModelAdmin):
+    list_display = ('code', 'title')

@@ -80,6 +80,7 @@ class Subscription(models.Model):
         related_name='subscriptions',
         verbose_name='Использованный промо-код'
     )
+    persons = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], verbose_name='Количество персон')
 
     def save(self, *args, **kwargs):
         if not self.expiring_date:

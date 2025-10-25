@@ -28,6 +28,7 @@
         data.is_lunch = !!fd.get('is_lunch');
         data.is_dinner = !!fd.get('is_dinner');
         data.is_dessert = !!fd.get('is_dessert');
+        data.persons = parseInt(fd.get('persons') || '1', 10);
         data.promo_code = (fd.get('promo_code') || '').trim();
         data.excluded_allergens = [];
         form.querySelectorAll('input[name="excluded_allergens"]:checked').forEach(ch => {

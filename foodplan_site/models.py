@@ -78,6 +78,19 @@ class Recipe(models.Model):
         ordering = ['name']
 
 
+class DietInfo(models.Model):
+    code = models.CharField(max_length=50, choices=MENU_TYPES, unique=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.get_code_display()
+
+    class Meta:
+        verbose_name = 'Тип меню (описание)'
+        verbose_name_plural = 'Типы меню (описания)'
+
+
 class RecipeIngredient(models.Model):
     UNITS = [
         ('g', 'г'),

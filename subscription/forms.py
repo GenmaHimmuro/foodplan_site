@@ -7,6 +7,7 @@ from foodplan_site.models import Allergen
 class OrderForm(forms.Form):
     duration = forms.ChoiceField(choices=DURATION_CHOICES)
     diet_type = forms.ChoiceField(choices=MENU_TYPES)
+    persons = forms.IntegerField(min_value=1, max_value=6, initial=1)
 
     is_breakfast = forms.BooleanField(required=False)
     is_lunch = forms.BooleanField(required=False)
@@ -35,4 +36,3 @@ class OrderForm(forms.Form):
         ):
             raise forms.ValidationError('Нужно выбрать хотя бы один приём пищи.')
         return cleaned
-

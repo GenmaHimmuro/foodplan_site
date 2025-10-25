@@ -20,11 +20,13 @@ class OrderSerializer(serializers.Serializer):
     is_lunch = serializers.BooleanField(default=False)
     is_dinner = serializers.BooleanField(default=False)
     is_dessert = serializers.BooleanField(default=False)
+    persons = serializers.IntegerField(min_value=1, default=1)
 
     excluded_allergens = serializers.ListField(
         child=serializers.IntegerField(), required=False, allow_empty=True
     )
     promo_code = serializers.CharField(required=False, allow_blank=True)
+    description = serializers.CharField(required=False, allow_blank=True)
 
     def validate_duration(self, value: int) -> int:
         allowed = get_choice_values(DURATION_CHOICES)
@@ -66,7 +68,7 @@ class OrderSerializer(serializers.Serializer):
 
 
 class PromoCheckSerializer(OrderSerializer):
-    def create(self, validated_data):  # not used
+    def create(self, validated_data):
         raise NotImplementedError
 
     def compute_price(self):
