@@ -21,11 +21,6 @@ class Ingredient(models.Model):
         unique=True,
         help_text='Например: Курица'
     )
-    description = models.TextField(
-        verbose_name='Описание',
-        blank=True,
-        help_text='Краткое описание продукта или способа приготовления'
-    )
     allergen = models.ForeignKey(
         Allergen,
         on_delete=models.SET_NULL,
@@ -48,6 +43,11 @@ class Recipe(models.Model):
         verbose_name='Название блюда',
         max_length=150,
         help_text='Название рецепта, например: Овсянка с ягодами'
+    )
+    description = models.TextField(
+        verbose_name='Описание',
+        blank=True,
+        help_text='Краткое описание способа приготовления'
     )
     image = models.ImageField(
         verbose_name='Фото блюда',
