@@ -24,6 +24,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse1">
                     <ul class="navbar-nav w-100">
                         <li class="nav-item align-items-center d-md-flex flex-grow-1 justify-content-end">
+                            <button class="btn btn-outline-success me-2 shadow-none foodplan_green foodplan__border_green">Подписка</button>
                             <a href="{% url 'accounts:login' %}" class="btn btn-outline-success shadow-none foodplan_green foodplan__border_green">Войти</a>
                         </li>
                     </ul>
@@ -56,15 +57,15 @@
                             </div>
                         {% endif %}
                         <div class="mb-3">
-                            <label for="id_username" class="form-label">Email</label>
-                            {{ form.username }}
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="username" aria-describedby="emailHelp" value="{{ form.username.value|default_if_none:'' }}">
                         </div>
                         <div class="mb-3">
                             <div class="d-flex align-items-center justify-content-between">
-                                <label for="id_password" class="form-label">Пароль</label>
+                                <label for="password" class="form-label">Пароль</label>
                                 <small><a href="#" class="link-dark foodplan_green">Забыли пароль?</a></small>
                             </div>
-                            {{ form.password }}
+                            <input type="password" class="form-control" id="password" name="password" value="{{ form.password.value|default_if_none:'' }}">
                         </div>
                         <div class="row mb-3">
                             <div class="col-12 col-sm-6 mt-3">

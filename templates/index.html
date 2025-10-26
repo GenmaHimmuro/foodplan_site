@@ -44,7 +44,7 @@
                             Больше не нужно думать, что готовить.</h4>
                         <div class="d-block mt-3">
                             {% if user.is_authenticated %}
-                                <a href="{% url 'accounts:order' %}" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Хочу попробовать</a>
+                                <a href="{% url 'accounts:order' %}" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Начать готовить</a>
                             {% else %}
                                 <a href="{% url 'accounts:register' %}" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Хочу попробовать</a>
                             {% endif %}
