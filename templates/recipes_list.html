@@ -27,19 +27,19 @@
                 <div class="col-sm-4">
                     <select name="diet_type" class="form-select">
                         <option value="">Тип меню</option>
-                        <option value="classic" {% if diet_type=='classic' %}selected{% endif %}>Классическое</option>
-                        <option value="low_carb" {% if diet_type=='low_carb' %}selected{% endif %}>Низкоуглеводное</option>
-                        <option value="vegetarian" {% if diet_type=='vegetarian' %}selected{% endif %}>Вегетарианское</option>
-                        <option value="keto" {% if diet_type=='keto' %}selected{% endif %}>Кето</option>
+                        <option value="classic" {% if diet_type == 'classic' %}selected{% endif %}>Классическое</option>
+                        <option value="low_carb" {% if diet_type == 'low_carb' %}selected{% endif %}>Низкоуглеводное</option>
+                        <option value="vegetarian" {% if diet_type == 'vegetarian' %}selected{% endif %}>Вегетарианское</option>
+                        <option value="keto" {% if diet_type == 'keto' %}selected{% endif %}>Кето</option>
                     </select>
                 </div>
                 <div class="col-sm-4">
                     <select name="dish_type" class="form-select">
                         <option value="">Тип блюда</option>
-                        <option value="breakfast" {% if dish_type=='breakfast' %}selected{% endif %}>Завтрак</option>
-                        <option value="lunch" {% if dish_type=='lunch' %}selected{% endif %}>Обед</option>
-                        <option value="dinner" {% if dish_type=='dinner' %}selected{% endif %}>Ужин</option>
-                        <option value="dessert" {% if dish_type=='dessert' %}selected{% endif %}>Десерт</option>
+                        <option value="breakfast" {% if dish_type == 'breakfast' %}selected{% endif %}>Завтрак</option>
+                        <option value="lunch" {% if dish_type == 'lunch' %}selected{% endif %}>Обед</option>
+                        <option value="dinner" {% if dish_type == 'dinner' %}selected{% endif %}>Ужин</option>
+                        <option value="dessert" {% if dish_type == 'dessert' %}selected{% endif %}>Десерт</option>
                     </select>
                 </div>
                 <div class="col-sm-4 d-grid">
