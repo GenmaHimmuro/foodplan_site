@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <title>{{ recipe.name|default:"Блюдо" }} — Foodplan</title>
+    <title>Меню — Foodplan</title>
 </head>
 <body>
     <header>
@@ -25,11 +25,12 @@
     <main style="margin-top: calc(2rem + 75px);">
         <section>
             <div class="container">
-                <div class="row">
+                {% for meal, dish in menu.items %}
+                <div class="row mb-5">
                     <div class="col-12 col-md-4 d-flex justify-content-center">
                         <div class="card foodplan__card_borderless">
-                            {% if recipe and recipe.image %}
-                                <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}">
+                            {% if dish.image %}
+                                <img src="{{ dish.image.url }}" alt="{{ dish.dish_title }}">
                             {% else %}
                                 <img src="{% static 'img/circle1.png' %}" alt="">
                             {% endif %}
@@ -37,21 +38,15 @@
                     </div>
                     <div class="col-12 col-md-8 d-flex flex-column justify-content-between">
                         <div class="row">
-                            <h2>{{ recipe.name }}</h2>
                             <div class="col-12 col-sm-6">
-                                <h6>Рецепт рецепт Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eius nemo voluptatum minus
-                                    facilis blanditiis ut architecto rem maiores, aperiam aut debitis repellat quod voluptates natus, laboriosam hic
-                                    adipisci non. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eius nemo voluptatum minus
-                                    facilis blanditiis ut architecto rem maiores, aperiam aut debitis repellat quod voluptates natus, laboriosam hic
-                                    adipisci non. Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi eius nemo voluptatum minus
-                                    facilis blanditiis ut architecto rem maiores, aperiam aut debitis repellat quod voluptates natus, laboriosam hic
-                                    adipisci non.</h6>
+                                <h6>{{ dish.dish_title }}</h6>
+                                <p>Как приготовить: {{ dish.description }}</p>
                             </div>
                             <div class="col-12 col-sm-6">
                                 <small class="link-secondary">Ингредиенты:</small>
                                 <ul class="list-group list-group-flush">
-                                    {% for ri in recipe.ingredients.all %}
-                                        <li class="list-group-item disabled"><small>{{ ri.ingredient.name }} ({{ ri.quantity }} {{ ri.get_unit_display }})</small></li>
+                                    {% for name, qty in dish.ingredients.items %}
+                                        <li class="list-group-item disabled"><small>{{ name }} ({{ qty }})</small></li>
                                     {% empty %}
                                         <li class="list-group-item disabled"><small>Состав не указан</small></li>
                                     {% endfor %}
@@ -60,6 +55,7 @@
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </section>
     </main>
@@ -89,3 +85,4 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 </body>
+</html>

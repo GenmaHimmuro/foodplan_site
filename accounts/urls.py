@@ -13,5 +13,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(next_page='home'), name='logout'),
     path('lk/', views.lk, name='lk'),
     path('order/', views.order, name='order'),
-    path('card/', views.card, name='card'),
+    path('card/<int:subscription_id>/', views.card, name='card'),
 ]

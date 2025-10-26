@@ -100,7 +100,7 @@
                                         <div class="col-10 col-md-10">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <h2>{{ s.get_diet_type_display }} — {{ s.get_duration_display }}</h2>
+                                                    <h2><a href="{% url 'accounts:card' s.id %}" style="color: black; text-decoration: none;">{{ s.get_diet_type_display }} — {{ s.get_duration_display }}</a></h2>
                                                 </div>
                                                 {% if s.diet_description %}
                                                 <div class="col-md-12 col-lg-9">

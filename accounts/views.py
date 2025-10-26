@@ -1,15 +1,17 @@
-from django.shortcuts import render, redirect
-from .forms import CustomUserCreationForm
+from datetime import date
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
 from django.contrib import messages
-from django.contrib.auth.views import LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
+from django.db.utils import OperationalError, ProgrammingError
+
+from foodplan_site.models import Allergen, DietInfo
+from .forms import CustomUserCreationForm
+from .menu_creator import create_menu
 from subscription.forms import OrderForm
 from subscription.models import Subscription, Promotion
-from foodplan_site.models import Allergen, DietInfo
-from django.db.utils import OperationalError, ProgrammingError
-from datetime import date
 
 
 def register(request):
@@ -112,5 +114,25 @@ def order(request):
     return render(request, 'order.html', context)
 
 
-def card(request):
-    return render(request, 'card.html')
+@login_required(login_url='register')
+def card(request, subscription_id):
+    user_subscription = get_object_or_404(Subscription, id=subscription_id, user=request.user)
+
+    if (
+        request.session.get('menu')
+        and request.session.get('date') == date.today().isoformat()
+        and request.session.get('subscription_id') == subscription_id
+    ):
+        context = request.session.get('menu')
+    else:
+        menu = create_menu(user_subscription)
+        request.session['menu'] = menu
+        request.session['date'] = date.today().isoformat()
+        request.session['subscription_id'] = subscription_id
+        context = menu
+
+    return render(
+        request,
+        'card.html',
+        {'menu': context, 'subscription': user_subscription}
+    )
