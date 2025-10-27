@@ -154,7 +154,10 @@
                     <button type="button" id="applyPromo" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green">Применить</button>
                 </div>
                 <div class="d-flex justify-content-center my-5">
-                    <button type="submit" id="payBtn" class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green w-50">Оплатить</button>
+                    <a href="{% url 'accounts:lk' %}" 
+                    class="btn shadow-none btn-outline-success foodplan_green foodplan__border_green w-50">
+                        Оплатить
+                    </a>
                 </div>
                 </form>
             </div>
